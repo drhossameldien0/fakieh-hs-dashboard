@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>اختبارات التوقيت — ثانوية عبدالرحمن فقيه</title>
+<style>
+  body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #04241a; color: #f4f6ef; padding: 2rem; }
+  h1 { color: #c9ae63; }
+  li { padding: .3rem 0; list-style: none; }
+  .ok { color: #7fe0a6; } .fail { color: #f6b3a8; }
+  small { display: block; color: #f6b3a8; margin-inline-start: 1.5rem; }
+  #sum { font-size: 1.3rem; font-weight: bold; margin-top: 1rem; }
+  footer { margin-top: 2rem; color: #c9ae63; }
+</style>
+</head>
+<body>
+<h1>اختبارات حسابات التوقيت والتنبيهات</h1>
+<ul id="out"></ul>
+<div id="sum"></div>
+<footer>تصميم / حسام محمد بليغ</footer>
+<script src="../js/config/default-settings.js"></script>
+<script src="../js/core/time.js"></script>
+<script src="../js/core/alerts.js"></script>
+<script src="../js/ui/presentation.js"></script>
+<script src="../js/core/prayer.js"></script>
+<script src="timing.spec.js"></script>
+<script>
+  var out = document.getElementById('out');
+  var r = FakiehTests.runTests(FakiehTime, FakiehAlerts, FAKIEH_DEFAULTS, function (ok, name, err) {
+    var li = document.createElement('li');
+    li.className = ok ? 'ok' : 'fail';
+    li.textContent = (ok ? '✔ ' : '✘ ') + name;
+    if (err) { var s = document.createElement('small'); s.textContent = err; li.appendChild(s); }
+    out.appendChild(li);
+  });
+  document.getElementById('sum').textContent = 'النتيجة: ' + r.passed + ' / ' + r.total + ' ناجح' + (r.failed ? ' — ' + r.failed + ' فاشل' : '');
+</script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+/* =========================================================================
+   الرئيسية: الجدول (يمين) — الساعة والعداد (الوسط) — التقويم والإعلانات (يسار)
+   ========================================================================= */
+.view-home {
+  display: grid;
+  grid-template-columns: 22rem 1fr 23rem;
+  gap: 1.4rem;
+  padding: 1.4rem 2rem;
+}
+
+/* ---------------------------- جدول الحصص ---------------------------- */
+.schedule-panel { display: flex; flex-direction: column; overflow: hidden; }
+.schedule { list-style: none; display: flex; flex-direction: column; gap: .32rem; flex: 1; min-height: 0; justify-content: space-between; }
+.sched-row {
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: .4rem;
+  padding: .52rem .8rem; border-radius: .75rem;
+  border: 1px solid transparent;
+  transition: background .4s var(--ease), border-color .4s var(--ease), opacity .4s;
+}
+.sched-name { font-size: 1.02rem; font-weight: 500; display: flex; align-items: center; gap: .45rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sched-time { font-size: .92rem; color: var(--muted); font-feature-settings: 'tnum'; direction: ltr; white-space: nowrap; }
+.sched-row.done { opacity: .42; }
+.sched-row.type-break, .sched-row.type-prayer, .sched-row.type-assembly { background: rgba(255,255,255,.03); }
+.sched-row.type-break .sched-name, .sched-row.type-prayer .sched-name { color: color-mix(in srgb, var(--gold) 80%, #fff); }
+.sched-row.next { border-color: color-mix(in srgb, var(--primary) 70%, transparent); border-style: dashed; }
+.sched-row.current {
+  background: linear-gradient(270deg, color-mix(in srgb, var(--gold) 30%, transparent), color-mix(in srgb, var(--gold) 8%, transparent));
+  border-color: var(--gold);
+  box-shadow: 0 0 1.4rem color-mix(in srgb, var(--gold) 22%, transparent);
+}
+.sched-row.current .sched-name { font-weight: 700; color: #fff; }
+.sched-row.current .sched-time { color: var(--gold); }
+.sched-row.current .sched-name::before { content: ''; width: .55rem; height: .55rem; border-radius: 50%; background: var(--gold); box-shadow: 0 0 .6rem var(--gold); animation: softPulse 2s infinite; }
+.badge-intl { font-size: .65rem; padding: .08rem .45rem; border-radius: 1rem; background: rgba(74,163,201,.2); color: #8fd0ea; border: 1px solid rgba(74,163,201,.45); }
+.sched-gap { height: 0; border-top: 1px dashed rgba(255,255,255,.08); margin: 0 .8rem; position: relative; }
+.sched-gap.current { border-top-color: var(--gold); }
+
+/* ---------------------------- القلب: الساعة والعداد ---------------------------- */
+.hero {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 1rem; padding: 1.5rem 2rem;
+  border-radius: 1.8rem;
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 45%, color-mix(in srgb, var(--primary) 26%, transparent), transparent 75%),
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.06);
+  min-height: 0; overflow: hidden;
+  transition: border-color 1s, box-shadow 1s;
+}
+.hero-clock { display: flex; align-items: baseline; gap: .8rem; direction: ltr; }
+.hero-clock-time { font-size: 8.8rem; font-weight: 500; letter-spacing: .04em; font-feature-settings: 'tnum'; color: rgba(255,255,255,.92); line-height: 1; }
+.hero-clock-suffix { font-size: 2.8rem; color: var(--gold); direction: rtl; }
+
+.hero-state { text-align: center; }
+.hero-kind { display: inline-block; font-size: 1.05rem; color: var(--gold); padding: .2rem 1rem; border-radius: 2rem; border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent); margin-bottom: .5rem; }
+.hero-title { font-size: 3.4rem; font-weight: 700; line-height: 1.2; }
+
+.hero-countdown-wrap { text-align: center; }
+.hero-countdown-label { font-size: 1.25rem; color: var(--muted); }
+.hero-countdown {
+  font-size: 14.5rem; font-weight: 700; line-height: .95;
+  font-feature-settings: 'tnum'; direction: ltr; letter-spacing: .02em;
+  color: #fff;
+  text-shadow: 0 .6rem 2.4rem rgba(0,0,0,.35);
+  transition: color 1s linear, text-shadow 1s linear, font-size .4s var(--ease);
+}
+.hero-countdown.long { font-size: 11.5rem; }
+.hero-countdown span { display: inline-block; width: .6em; text-align: center; }
+.hero-countdown span.colon { width: .32em; position: relative; top: -.06em; }
+.hero-message { font-size: 3rem; font-weight: 700; color: var(--gold); line-height: 1.5; }
+.hero-message:empty { display: none; }
+
+.progress { width: min(100%, 52rem); height: .9rem; border-radius: 1rem; background: rgba(255,255,255,.08); overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,.4); }
+.progress span { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(270deg, var(--primary), color-mix(in srgb, var(--primary) 50%, var(--gold)), var(--gold)); transition: width .9s linear; }
+
+.hero-times { display: flex; gap: 3rem; }
+.hero-times div { display: flex; flex-direction: column; align-items: center; gap: .1rem; }
+.hero-times small { font-size: .95rem; color: var(--muted); }
+.hero-times b { font-size: 1.9rem; font-weight: 700; font-feature-settings: 'tnum'; direction: ltr; }
+.hero-next {
+  font-size: 1.6rem; padding: .6rem 1.6rem; border-radius: 1rem;
+  background: var(--glass-strong); border: 1px solid var(--line);
+}
+.hero-next:empty { display: none; }
+.hero-next b { color: var(--gold); font-weight: 700; }
+
+/* حالات العداد */
+.hero.warn { border-color: color-mix(in srgb, var(--gold) 60%, transparent); }
+.hero.final { border-color: var(--gold); box-shadow: var(--shadow), 0 0 0 .25rem color-mix(in srgb, var(--gold) 25%, transparent), 0 0 4rem color-mix(in srgb, var(--gold) 25%, transparent); }
+.hero.final .hero-countdown { animation: softPulse 1.6s ease-in-out infinite; }
+.final-banner {
+  position: absolute; top: 1rem; left: 50%; transform: translate(-50%, -150%);
+  padding: .5rem 1.4rem; border-radius: 2rem; font-size: 1.1rem; font-weight: 700;
+  background: var(--gold); color: #1d1a0e; opacity: 0;
+  transition: transform .5s var(--ease), opacity .5s var(--ease);
+}
+.hero.final .final-banner { transform: translate(-50%, 0); opacity: 1; }
+.hero.idle .hero-countdown-wrap .hero-countdown, .hero.idle .progress, .hero.idle .hero-times, .hero.idle .hero-countdown-label { display: none; }
+.hero.idle .hero-title { font-size: 3rem; }
+
+/* ---------------------------- العمود الجانبي ---------------------------- */
+.side-col { display: flex; flex-direction: column; gap: 1.1rem; min-height: 0; }
+.date-panel { text-align: center; padding: 1.2rem; }
+.date-big-day { font-size: 1.1rem; color: var(--muted); }
+.date-big-hijri { font-size: 1.6rem; white-space: nowrap; font-weight: 700; color: var(--gold); margin: .2rem 0; }
+.date-big-greg { font-size: 1.15rem; }
+
+.prayer-panel { padding: .9rem 1rem; }
+.prayer-panel .panel-head { margin-bottom: .6rem; }
+.pr-list { display: grid; grid-template-columns: repeat(5, 1fr); gap: .3rem; }
+.pr-item { display: flex; flex-direction: column; align-items: center; gap: .1rem; padding: .4rem .1rem; border-radius: .6rem; background: rgba(255,255,255,.035); border: 1px solid transparent; }
+.pr-item span { font-size: .78rem; color: var(--muted); }
+.pr-item b { font-size: 1.02rem; font-feature-settings: 'tnum'; }
+.pr-item.alerted span::after { content: ' •'; color: var(--gold); }
+.pr-item.next { background: var(--gold-soft); border-color: var(--gold); }
+.pr-item.next b, .pr-item.next span { color: var(--gold); }
+.pr-foot { display: flex; align-items: center; gap: .4rem; margin-top: .6rem; }
+.pr-next { flex: 1; font-size: .88rem; font-feature-settings: 'tnum'; }
+.pr-tg { font-size: .78rem; padding: .3rem .6rem; border-radius: 1rem; background: rgba(255,255,255,.05); border: 1px solid var(--line); color: var(--faint); white-space: nowrap; }
+.pr-tg.on { color: var(--gold); border-color: color-mix(in srgb, var(--gold) 55%, transparent); background: var(--gold-soft); }
+.occasions-panel { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+.occasions { list-style: none; display: flex; flex-direction: column; gap: .55rem; overflow: hidden; }
+.occ {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .7rem;
+  padding: .6rem .7rem; border-radius: .8rem; background: rgba(255,255,255,.035);
+  border-inline-start: .3rem solid var(--occ, var(--gold));
+}
+.occ-date { text-align: center; line-height: 1.1; min-width: 2.8rem; }
+.occ-date b { display: block; font-size: 1.45rem; font-feature-settings: 'tnum'; }
+.occ-date small { font-size: .72rem; color: var(--muted); }
+.occ-name { font-size: 1rem; font-weight: 500; line-height: 1.3; }
+.occ-cat { font-size: .72rem; color: var(--occ); }
+.occ-days { font-size: .82rem; padding: .25rem .6rem; border-radius: 1rem; background: rgba(255,255,255,.06); white-space: nowrap; }
+.occ.soon .occ-days { background: var(--gold); color: #1d1a0e; font-weight: 700; }
+.occ-empty { color: var(--muted); font-size: .95rem; }
+
+.announce-text { font-size: 1.15rem; line-height: 1.7; min-height: 3.4em; transition: opacity .5s; }
+.announce-text.fade { opacity: 0; }
+
+/* أذكار الصباح أثناء الطابور (لا تحجب التوقيت) */
+.azkar-mini { flex: 1.4; display: flex; flex-direction: column; min-height: 0;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--gold) 12%, transparent), var(--glass)); border-color: color-mix(in srgb, var(--gold) 40%, transparent); }
+.azkar-mini-body { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: .8rem; min-height: 0; }
+.azkar-mini-text { font-size: 1.45rem; line-height: 2; text-align: center; transition: opacity .6s var(--ease); overflow: hidden; }
+.azkar-mini-text.fade { opacity: 0; }
+.azkar-mini-meta { display: flex; justify-content: space-between; gap: .5rem; font-size: .8rem; color: var(--muted); }
+.azkar-mini-meta span:first-child { color: var(--gold); }
+.app.assembly-time .date-panel { display: none; }
+.app.assembly-time .occasions-panel { flex: .8; }
+
+@media (max-width: 1100px), (max-height: 600px) {
+  .view-home { grid-template-columns: 1fr; padding: 1rem; }
+  .view-home.active { display: grid; }
+  .hero { order: -1; }
+  .hero-countdown { font-size: 7rem; }
+  .hero-countdown.long { font-size: 5.5rem; }
+  .hero-clock-time { font-size: 3rem; }
+  .hero-title { font-size: 2.2rem; }
+}

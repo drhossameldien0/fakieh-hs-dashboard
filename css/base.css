@@ -1,0 +1,262 @@
+/* =========================================================================
+   الأساس: الخطوط، الألوان، التخطيط العام، الشريط العلوي، التبويبات، التذييل
+   كل المقاسات بوحدة rem، وحجم rem يتناسب مع الشاشة (16px عند 1920×1080 و32px عند 4K)
+   ========================================================================= */
+@font-face { font-family: 'Expo Arabic'; src: url('../fonts/ExpoArabic-Book.ttf') format('truetype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Expo Arabic'; src: url('../fonts/ExpoArabic-Medium.ttf') format('truetype'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'Expo Arabic'; src: url('../fonts/ExpoArabic-Bold.otf') format('opentype'); font-weight: 700; font-display: swap; }
+
+:root {
+  /* تُستبدل من لوحة الإعدادات */
+  --bg: #04241a;
+  --primary: #127a3e;
+  --gold: #c9ae63;
+
+  --bg-deep: color-mix(in srgb, var(--bg) 70%, #000);
+  --gold-soft: color-mix(in srgb, var(--gold) 22%, transparent);
+  --text: #f4f6ef;
+  --muted: rgba(238, 240, 227, .62);
+  --faint: rgba(238, 240, 227, .38);
+  --line: rgba(201, 174, 99, .18);
+  --glass: rgba(255, 255, 255, .045);
+  --glass-strong: rgba(255, 255, 255, .075);
+  --shadow: 0 1.2rem 2.8rem rgba(0, 0, 0, .35);
+  --radius: 1.1rem;
+  --ease: cubic-bezier(.22, .8, .24, 1);
+
+  --font: 'Expo Arabic', 'Segoe UI', Tahoma, sans-serif;
+  font-size: max(10px, min(calc(100vw / 120), calc(100vh / 67.5)));
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: var(--font);
+  color: var(--text);
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 35%, color-mix(in srgb, var(--primary) 32%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 50% at 100% 100%, color-mix(in srgb, var(--gold) 9%, transparent), transparent 70%),
+    linear-gradient(160deg, var(--bg) 0%, var(--bg-deep) 100%);
+  background-color: var(--bg);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select, textarea { font-family: inherit; font-size: inherit; color: inherit; }
+button { cursor: pointer; }
+[hidden] { display: none !important; }
+.num { font-feature-settings: 'tnum'; }
+
+/* ============================ التخطيط العام ============================ */
+.app {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto auto;
+  grid-template-areas: 'top' 'strip' 'main' 'ticker' 'credit';
+}
+.topbar { grid-area: top; }
+.time-strip { grid-area: strip; }
+.views { grid-area: main; min-height: 0; position: relative; }
+.ticker { grid-area: ticker; }
+.credit { grid-area: credit; }
+
+/* ============================ الشريط العلوي ============================ */
+.topbar {
+  display: flex; align-items: center; gap: 1.6rem;
+  padding: .8rem 2rem;
+  background: linear-gradient(180deg, rgba(0,0,0,.28), rgba(0,0,0,.08));
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: .9rem; flex-shrink: 0; }
+.brand-logo { height: 4rem; width: auto; display: block; }
+.brand-name { font-size: 1.55rem; font-weight: 700; line-height: 1.2; white-space: nowrap; }
+.brand-sub { font-size: .85rem; color: var(--gold); white-space: nowrap; }
+
+.tabs { display: flex; gap: .3rem; flex: 1; justify-content: center; min-width: 0; }
+.tab {
+  display: flex; align-items: center; gap: .5rem;
+  padding: .65rem .95rem; border-radius: .8rem;
+  background: transparent; border: 1px solid transparent;
+  color: var(--muted); font-size: .95rem; font-weight: 500; white-space: nowrap;
+  transition: color .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease);
+}
+.tab svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
+.tab:hover { color: var(--text); background: var(--glass); }
+.tab.active {
+  color: #1d1a0e; font-weight: 700;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--gold) 100%, #fff 18%), var(--gold));
+  box-shadow: 0 .4rem 1.2rem color-mix(in srgb, var(--gold) 35%, transparent);
+}
+
+.status { display: flex; align-items: center; gap: .8rem; flex-shrink: 0; }
+.dates { text-align: left; line-height: 1.35; }
+.date-hijri { font-size: 1.05rem; font-weight: 700; color: var(--gold); white-space: nowrap; }
+.date-greg { font-size: .85rem; color: var(--muted); white-space: nowrap; }
+.status-btn, .status-pill {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .45rem .8rem; border-radius: 2rem; font-size: .8rem;
+  background: var(--glass); border: 1px solid var(--line); white-space: nowrap;
+}
+.status-pill { padding: .45rem .6rem; }
+.dot { width: .6rem; height: .6rem; border-radius: 50%; background: #d65a4a; box-shadow: 0 0 .5rem currentColor; flex-shrink: 0; }
+.ok .dot { background: #3fcf7c; }
+.icon-btn {
+  width: 2.4rem; height: 2.4rem; border-radius: .7rem; display: grid; place-items: center;
+  background: var(--glass); border: 1px solid var(--line); color: var(--muted);
+}
+.icon-btn:hover { color: var(--text); }
+.icon-btn svg { width: 1.2rem; height: 1.2rem; }
+
+/* ============================ اللوحات الزجاجية ============================ */
+.panel {
+  background: linear-gradient(180deg, var(--glass-strong), var(--glass));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(6px);
+  padding: 1.1rem 1.2rem;
+  min-height: 0;
+}
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin-bottom: .8rem; }
+.panel-head h2 { font-size: 1.15rem; font-weight: 700; }
+.chip {
+  font-size: .75rem; padding: .25rem .65rem; border-radius: 2rem; white-space: nowrap;
+  background: color-mix(in srgb, var(--primary) 35%, transparent); border: 1px solid color-mix(in srgb, var(--primary) 70%, transparent);
+}
+.chip-gold { background: var(--gold-soft); border-color: color-mix(in srgb, var(--gold) 55%, transparent); color: var(--gold); }
+
+/* ============================ العرض والانتقالات ============================ */
+.view { position: absolute; inset: 0; opacity: 0; visibility: hidden; transform: translateY(.6rem); transition: opacity .35s var(--ease), transform .35s var(--ease), visibility 0s .35s; }
+.view.active { opacity: 1; visibility: visible; transform: none; transition: opacity .35s var(--ease), transform .35s var(--ease); }
+
+/* ============================ شريط التوقيت المصغّر ============================ */
+.time-strip {
+  display: none; align-items: center; gap: 1.2rem;
+  padding: .55rem 2rem;
+  background: linear-gradient(90deg, rgba(0,0,0,.25), color-mix(in srgb, var(--primary) 18%, transparent), rgba(0,0,0,.25));
+  border-bottom: 1px solid var(--line);
+}
+.app:not([data-view="home"]) .time-strip { display: flex; }
+.ts-clock { font-size: 1.5rem; font-weight: 700; font-feature-settings: 'tnum'; white-space: nowrap; }
+.ts-clock small { font-size: .8rem; color: var(--muted); margin-inline-start: .35rem; font-weight: 400; }
+.ts-sep { width: 1px; height: 1.8rem; background: var(--line); }
+.ts-period { font-size: 1.15rem; font-weight: 500; white-space: nowrap; }
+.ts-count { font-size: 2rem; font-weight: 700; font-feature-settings: 'tnum'; transition: color 1s linear; min-width: 6rem; text-align: center; }
+.ts-bar { flex: 1; height: .45rem; border-radius: 1rem; background: rgba(255,255,255,.08); overflow: hidden; min-width: 4rem; }
+.ts-bar span { display: block; height: 100%; width: 0; background: linear-gradient(270deg, var(--primary), var(--gold)); border-radius: inherit; transition: width .9s linear; margin-inline-start: 0; }
+.ts-next { font-size: .95rem; color: var(--muted); white-space: nowrap; }
+.ts-home {
+  padding: .4rem .9rem; border-radius: .6rem; font-size: .85rem;
+  background: var(--gold-soft); border: 1px solid color-mix(in srgb, var(--gold) 50%, transparent); color: var(--gold);
+}
+.time-strip.final .ts-count { animation: softPulse 1.6s ease-in-out infinite; }
+
+/* ============================ الشريط المتحرك ============================ */
+.ticker {
+  display: flex; align-items: stretch; height: 3.4rem;
+  background: linear-gradient(180deg, rgba(0,0,0,.22), rgba(0,0,0,.35));
+  border-top: 1px solid var(--line);
+}
+.ticker[hidden] { display: none !important; }
+.ticker-label {
+  display: flex; align-items: center; padding: 0 1.4rem; flex-shrink: 0;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--gold) 100%, #fff 12%), var(--gold));
+  color: #1d1a0e; font-weight: 700; font-size: 1.05rem;
+}
+.ticker-viewport { flex: 1; overflow: hidden; position: relative; display: flex; align-items: center; mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+.ticker-track { position: absolute; right: 0; display: flex; white-space: nowrap; will-change: transform; }
+.ticker-item { display: inline-flex; align-items: center; gap: .6rem; font-size: 1.25rem; padding-inline: 1.4rem; }
+.ticker-item::before { content: ''; width: .5rem; height: .5rem; transform: rotate(45deg); background: var(--gold); flex-shrink: 0; }
+.ticker-item small { font-size: .85rem; color: var(--gold); }
+.ticker-item .tag { font-size: .75rem; padding: .1rem .5rem; border-radius: 1rem; background: var(--glass-strong); color: var(--muted); }
+@keyframes tickerMove { from { transform: translateX(0); } to { transform: translateX(50%); } }
+.ticker-static .ticker-track { position: static; animation: none !important; padding-inline: 1rem; }
+
+/* ============================ التذييل الثابت (حقوق التصميم) ============================ */
+.credit {
+  display: flex; align-items: center; justify-content: center;
+  height: 2.2rem; font-size: .9rem; font-weight: 500; letter-spacing: .02em;
+  color: color-mix(in srgb, var(--gold) 85%, #fff);
+  background: rgba(0,0,0,.42);
+  border-top: 1px solid var(--line);
+  position: relative; z-index: 50;
+}
+
+/* ============================ زر تفعيل الصوت ============================ */
+.sound-gate {
+  position: fixed; left: 50%; bottom: 7.5rem; transform: translateX(-50%);
+  z-index: 200; display: flex; flex-direction: column; align-items: center; gap: .6rem;
+  padding: 1.3rem 2rem; border-radius: 1.4rem; text-align: center;
+  background: color-mix(in srgb, var(--bg) 88%, #000); border: 1px solid color-mix(in srgb, var(--gold) 60%, transparent);
+  box-shadow: 0 1.5rem 4rem rgba(0,0,0,.55);
+  animation: rise .5s var(--ease);
+}
+.sound-gate p { font-size: .9rem; color: var(--muted); }
+.sound-gate-btn {
+  display: inline-flex; align-items: center; gap: .7rem;
+  padding: .9rem 2.4rem; border-radius: 1rem; border: 0;
+  font-size: 1.4rem; font-weight: 700; color: #1d1a0e;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--gold) 100%, #fff 20%), var(--gold));
+  box-shadow: 0 .6rem 1.6rem color-mix(in srgb, var(--gold) 40%, transparent);
+}
+.sound-gate-btn svg { width: 1.8rem; height: 1.8rem; fill: currentColor; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.sound-gate-later { background: none; border: 0; color: var(--faint); font-size: .85rem; text-decoration: underline; }
+
+/* ============================ الإشعار ============================ */
+.toast {
+  position: fixed; top: 6.5rem; left: 50%; transform: translate(-50%, -1rem);
+  z-index: 300; padding: .9rem 1.8rem; border-radius: 1rem;
+  font-size: 1.3rem; font-weight: 700; opacity: 0; pointer-events: none;
+  background: color-mix(in srgb, var(--bg) 80%, #000); border: 1px solid var(--gold);
+  box-shadow: 0 1rem 3rem rgba(0,0,0,.5);
+  transition: opacity .4s var(--ease), transform .4s var(--ease);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.adhan-bar {
+  position: fixed; top: 6.5rem; left: 50%; transform: translateX(-50%); z-index: 310;
+  display: flex; align-items: center; gap: 1rem; padding: 1rem 1.6rem; border-radius: 1.2rem;
+  background: color-mix(in srgb, var(--bg) 75%, #000); border: 2px solid var(--gold);
+  box-shadow: 0 1.2rem 3.5rem rgba(0,0,0,.6); animation: rise .5s var(--ease);
+}
+.adhan-bar b { display: block; font-size: 1.7rem; color: var(--gold); }
+.adhan-bar small { display: block; font-size: .85rem; color: var(--muted); }
+.adhan-bar small:empty { display: none; }
+.sim-badge {
+  position: fixed; bottom: 6rem; right: 1rem; z-index: 300;
+  padding: .4rem .9rem; border-radius: .6rem; font-size: .8rem;
+  background: #7a3b12; border: 1px solid #e0904a;
+}
+
+/* ============================ عناصر عامة ============================ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .45rem;
+  padding: .55rem 1.1rem; border-radius: .7rem; font-size: .95rem; font-weight: 500;
+  background: var(--glass-strong); border: 1px solid var(--line); color: var(--text);
+  transition: background .2s, border-color .2s;
+}
+.btn:hover { background: rgba(255,255,255,.12); border-color: color-mix(in srgb, var(--gold) 45%, transparent); }
+.btn svg { width: 1.15rem; height: 1.15rem; }
+.btn-gold { background: linear-gradient(180deg, color-mix(in srgb, var(--gold) 100%, #fff 15%), var(--gold)); color: #1d1a0e; border-color: transparent; font-weight: 700; }
+.btn-gold:hover { background: var(--gold); }
+.btn-danger { border-color: rgba(214, 90, 74, .5); color: #f2a497; }
+.btn.on { background: var(--gold-soft); border-color: var(--gold); color: var(--gold); }
+
+@keyframes softPulse { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
+@keyframes rise { from { opacity: 0; transform: translate(-50%, 1rem); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+/* ============================ الشاشات الصغيرة ============================ */
+@media (max-width: 1100px), (max-height: 600px) {
+  :root { font-size: 14px; }
+  body { overflow: auto; }
+  .app { height: auto; min-height: 100vh; }
+  .views { min-height: 70vh; }
+  .view { position: relative; inset: auto; display: none; }
+  .view.active { display: block; }
+  .topbar { flex-wrap: wrap; gap: .8rem; padding: .8rem 1rem; }
+  .tabs { order: 3; flex-basis: 100%; overflow-x: auto; justify-content: flex-start; }
+  .status { margin-inline-start: auto; }
+  .time-strip { flex-wrap: wrap; padding: .5rem 1rem; }
+  .credit { position: sticky; bottom: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

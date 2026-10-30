@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>لوحة التوقيت — ثانوية عبدالرحمن فقيه</title>
+  <link rel="icon" href="assets/img/logo-green.png">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/azkar.css">
+  <link rel="stylesheet" href="css/settings.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+<div class="app" id="app" data-view="home">
+
+  <!-- ============================ الشريط العلوي ============================ -->
+  <header class="topbar">
+    <div class="brand">
+      <img class="brand-logo" src="assets/img/logo-white.png" alt="شعار مدارس عبدالرحمن فقيه">
+      <div class="brand-text">
+        <div class="brand-name" data-bind="schoolName">ثانوية عبدالرحمن فقيه</div>
+        <div class="brand-sub" data-bind="schoolSubtitle">لوحة التوقيت المدرسي الذكية</div>
+      </div>
+    </div>
+
+    <nav class="tabs" id="tabs" aria-label="التبويبات الرئيسية"></nav>
+
+    <div class="status">
+      <div class="dates">
+        <div class="date-hijri" id="dateHijri">—</div>
+        <div class="date-greg" id="dateGreg">—</div>
+      </div>
+      <button class="status-btn" id="soundStatus" title="حالة الصوت">
+        <span class="dot"></span><span class="status-label">الصوت متوقف</span>
+      </button>
+      <span class="status-pill" id="netStatus" title="حالة الاتصال"><span class="dot"></span></span>
+      <button class="icon-btn present-btn" id="presentBtn" title="العرض التلقائي" aria-label="العرض التلقائي"></button>
+      <button class="icon-btn" id="fullscreenBtn" title="ملء الشاشة (F)" aria-label="ملء الشاشة"></button>
+    </div>
+  </header>
+
+  <!-- ================= شريط التوقيت المصغّر (يظهر في كل التبويبات عدا الرئيسية) ================= -->
+  <div class="time-strip" id="timeStrip" aria-live="polite">
+    <div class="ts-clock"><span id="tsClock">--:--:--</span><small id="tsSuffix"></small></div>
+    <div class="ts-sep"></div>
+    <div class="ts-period" id="tsPeriod">—</div>
+    <div class="ts-count" id="tsCount">--:--</div>
+    <div class="ts-bar"><span id="tsBar"></span></div>
+    <div class="ts-next" id="tsNext"></div>
+    <button class="ts-home" id="tsHome">العودة للتوقيت</button>
+  </div>
+
+  <!-- ============================ المحتوى ============================ -->
+  <main class="views" id="views">
+
+    <!-- الرئيسية -->
+    <section class="view view-home" id="view-home" data-view="home">
+      <aside class="panel schedule-panel">
+        <div class="panel-head">
+          <h2>جدول الحصص</h2>
+          <span class="chip" id="profileChip">التوقيت الشتوي</span>
+        </div>
+        <ol class="schedule" id="scheduleList"></ol>
+      </aside>
+
+      <div class="hero" id="hero">
+        <div class="hero-clock">
+          <span class="hero-clock-time" id="clock">--:--:--</span>
+          <span class="hero-clock-suffix" id="clockSuffix"></span>
+        </div>
+        <div class="hero-state">
+          <span class="hero-kind" id="stateKind">الحصة الحالية</span>
+          <h1 class="hero-title" id="stateTitle">—</h1>
+        </div>
+        <div class="hero-countdown-wrap">
+          <div class="hero-countdown-label" id="countdownLabel">الوقت المتبقي</div>
+          <div class="hero-countdown" id="countdown">--:--</div>
+          <div class="hero-message" id="heroMessage"></div>
+        </div>
+        <div class="progress" id="progress"><span id="progressBar"></span></div>
+        <div class="hero-times" id="heroTimes">
+          <div><small>البداية</small><b id="startTime">--:--</b></div>
+          <div><small>النهاية</small><b id="endTime">--:--</b></div>
+        </div>
+        <div class="hero-next" id="heroNext"></div>
+        <div class="final-banner" id="finalBanner">تبقّت أقل من دقيقة على نهاية الفترة</div>
+      </div>
+
+      <aside class="side-col">
+        <section class="panel azkar-mini" id="azkarMini" hidden>
+          <div class="panel-head"><h2>أذكار الصباح</h2><span class="chip chip-gold">الطابور الصباحي</span></div>
+          <div class="azkar-mini-body">
+            <p class="azkar-mini-text" id="azkarMiniText"></p>
+            <div class="azkar-mini-meta"><span id="azkarMiniCount"></span><span id="azkarMiniSource"></span></div>
+          </div>
+        </section>
+        <section class="panel date-panel" id="datePanel">
+          <div class="date-big-day" id="dayName">—</div>
+          <div class="date-big-hijri" id="bigHijri">—</div>
+          <div class="date-big-greg" id="bigGreg">—</div>
+        </section>
+        <section class="panel prayer-panel" id="prayerPanel"></section>
+        <section class="panel occasions-panel" id="occasionsPanel">
+          <div class="panel-head"><h2>المناسبات القادمة</h2></div>
+          <ul class="occasions" id="occasionsList"></ul>
+        </section>
+        <section class="panel announce-panel">
+          <div class="panel-head"><h2>إعلانات المدرسة</h2></div>
+          <p class="announce-text" id="announceText"></p>
+        </section>
+      </aside>
+    </section>
+
+    <!-- الأذكار -->
+    <section class="view view-azkar" id="view-azkar" data-view="azkar"></section>
+
+    <!-- المناسبات، التقويم الدراسي، السلامة، السلوك -->
+    <section class="view view-page" id="view-occasions" data-view="occasions"></section>
+    <section class="view view-page" id="view-academic" data-view="academic"></section>
+    <section class="view view-page" id="view-safety" data-view="safety"></section>
+    <section class="view view-page" id="view-conduct" data-view="conduct"></section>
+
+    <!-- الإعدادات -->
+    <section class="view view-settings" id="view-settings" data-view="settings"></section>
+  </main>
+
+  <!-- ============================ الشريط المتحرك ============================ -->
+  <div class="ticker" id="ticker">
+    <div class="ticker-label">نافذة الخير</div>
+    <div class="ticker-viewport"><div class="ticker-track" id="tickerTrack"></div></div>
+  </div>
+
+  <!-- ============================ التذييل الثابت ============================ -->
+  <footer class="credit">تصميم / حسام محمد بليغ</footer>
+</div>
+
+<!-- زر تفعيل الصوت -->
+<div class="sound-gate" id="soundGate">
+  <button class="sound-gate-btn" id="soundGateBtn">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none"/></svg>
+    تفعيل الصوت
+  </button>
+  <p>تتطلب المتصفحات ضغطة واحدة للسماح بتشغيل الجرس والتنبيهات</p>
+  <button class="sound-gate-later" id="soundGateLater">لاحقًا</button>
+</div>
+
+<!-- شريط الأذان -->
+<div class="adhan-bar" id="adhanBar" hidden>
+  <div><b id="adhanText"></b><small id="adhanNote"></small></div>
+  <button class="btn btn-gold" id="adhanStop">إيقاف الأذان</button>
+  <button class="btn" id="adhanClose">إغلاق</button>
+</div>
+
+<!-- إشعار التنبيه -->
+<div class="toast" id="toast" role="status"></div>
+<div class="sim-badge" id="simBadge" hidden></div>
+
+<script src="js/config/default-settings.js"></script>
+<script src="js/data/azkar.js"></script>
+<script src="js/data/hadith.js"></script>
+<script src="js/data/occasions.js"></script>
+<script src="js/data/academic-calendar.js"></script>
+<script src="js/data/safety.js"></script>
+<script src="js/data/conduct.js"></script>
+<script src="js/core/time.js"></script>
+<script src="js/core/alerts.js"></script>
+<script src="js/core/prayer.js"></script>
+<script src="js/core/store.js"></script>
+<script src="js/core/audio.js"></script>
+<script src="js/ui/icons.js"></script>
+<script src="js/ui/content.js"></script>
+<script src="js/ui/home.js"></script>
+<script src="js/ui/azkar.js"></script>
+<script src="js/ui/calendar.js"></script>
+<script src="js/ui/slides.js"></script>
+<script src="js/ui/occasions.js"></script>
+<script src="js/ui/academic.js"></script>
+<script src="js/ui/safety.js"></script>
+<script src="js/ui/conduct.js"></script>
+<script src="js/ui/presentation.js"></script>
+<script src="js/ui/settings.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
